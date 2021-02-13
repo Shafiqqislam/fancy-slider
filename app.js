@@ -19,16 +19,20 @@ const showImages = (images) => {
   gallery.innerHTML = '';
   // show gallery title
   galleryHeader.style.display = 'flex';
+  toggleSpinner();
   images.forEach(image => {
     let div = document.createElement('div');
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
-    div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
+    div.innerHTML = ` <img class="img-fluid img-thumbnail"  onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">
+    <button onclick="displayImagesDetails('${image.webformatURL}')">details</button>`;
     gallery.appendChild(div)
+    // toggleSpinner();
   })
 
 }
 
 const getImages = (query) => {
+  toggleSpinner();
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
     .then(data => showImages(data.hits))
@@ -130,3 +134,24 @@ document.getElementById("search")
     document.getElementById("search-btn").click();
   }
     });
+
+    const toggleSpinner =()=>{
+      const spinner = document.getElementById("loading-spinner");
+      spinner.classList.toggle('d-none');
+  }
+
+  const displayImagesDetails = name => {
+    const url = `https://pixabay.com/api/?key=${KEY}=${name}&image_type=photo&pretty=true`;
+    fetch(url)
+        .then(res => res.json())
+        .then(data => renderImagesInfo(data.hits))
+
+}
+const renderImagesInfo = image => {
+    const imagesDiv = document.getElementById('images-details');
+    imagesDiv.innerHTML = `
+    <img class="img-fluid img-thumbnail" src="${image.webformatURL}" alt="${image.tags}">
+            <h1>Name:${image.comments}</h1>
+              
+             `
+}

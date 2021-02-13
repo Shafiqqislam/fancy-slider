@@ -64,3 +64,33 @@ img {
     width: 90%;
   }
 }
+.form-control{
+  background-color:rgb(86 83 83 / 20%);
+  padding: 22px;
+  border: none;
+  border-radius: 25px;
+}
+.btn{
+  border-radius: 1.5rem;
+  padding: 9px 20px;
+}
+
+/* .btn-privious{
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+} */
+/* .navbar-toggler {
+  border: none;
+} */
+.search-box{
+  position: relative;
+} 
+.search-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+#create-slider{
+  padding: 22px;
+}

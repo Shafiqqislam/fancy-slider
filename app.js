@@ -7,10 +7,6 @@ const sliderContainer = document.getElementById('sliders');
 // selected image 
 let sliders = [];
 
-
-// If this key doesn't work
-// Find the name in the url and go to their website
-// to create your own api key
 const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 
 // show images 
@@ -24,16 +20,15 @@ const showImages = (images) => {
     let div = document.createElement('div');
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
     div.innerHTML = ` <img class="img-fluid img-thumbnail"  onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">
-    <button onclick="displayImagesDetails('${image.webformatURL}')">details</button>`;
+    <h5>Views :${image.views}</h5>`
     gallery.appendChild(div)
-    // toggleSpinner();
   })
 
 }
 
 const getImages = (query) => {
   toggleSpinner();
-  fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
+ fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
     .then(data => showImages(data.hits))
     .catch(err => console.log(err))
@@ -42,15 +37,16 @@ const getImages = (query) => {
 let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
-  element.classList.toggle('added');
+  element.classList.add('added');
  
   let item = sliders.indexOf(img);
   if (item === -1) {
     sliders.push(img);
    }
-    //else {
-  //   alert('Hey, Already added !')
-  // }
+    else {
+     sliders.splice(item,1);
+     element.classList.toggle('added');
+  }
 }
 var timer
 const createSlider = () => {
@@ -74,31 +70,31 @@ const createSlider = () => {
   imagesArea.style.display = 'none';
   const duration = Math.abs(document.getElementById('duration').value) || 1000;
     
-//      if(duration >=1000){
-//       setTimer();
-//      }
-//      if(duration<1000 && duration>=0){
-//      duration = duration + 1000;
-//      setTimer();
-//   }
+     if(duration >=1000){
+      setTimer();
+     }
+     if(duration>=0 && duration<1000 ){
+     duration = duration + 1000;
+     setTimer();
+  }
    
-//  function setTimer(){
+ function setTimer(){
     sliders.forEach(slide => {
       let item = document.createElement('div')
       item.className = "slider-item";
       item.innerHTML = `<img class="w-100"
       src="${slide}"
       alt="">`;
-      sliderContainer.appendChild(item)
-      
+      sliderContainer.appendChild(item) 
     })
- // }
+  }
  
   changeSlide(0)
   timer = setInterval(function () {
     slideIndex++;
     changeSlide(slideIndex);
   }, duration);
+  
 }
 
 // change slider index 
@@ -153,18 +149,4 @@ document.getElementById("search")
       spinner.classList.toggle('d-none');
   }
 
-  const displayImagesDetails = name => {
-    const url = `https://pixabay.com/api/?key=${KEY}=${name}&image_type=photo&pretty=true`;
-    fetch(url)
-        .then(res => res.json())
-        .then(data => renderImagesInfo(data.hits))
-
-}
-const renderImagesInfo = image => {
-    const imagesDiv = document.getElementById('images-details');
-    imagesDiv.innerHTML = `
-    <img class="img-fluid img-thumbnail" src="${image.webformatURL}" alt="${image.tags}">
-            <h1>Name:${image.comments}</h1>
-              
-             `
-}
+  
